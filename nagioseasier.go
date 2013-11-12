@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	conn, err := net.Dial("unix", "/var/nagios/rw/nagios.qh")
+	conn, err := net.Dial("unix", "/var/lib/nagios/rw/nagios.qh")
 
 	if err != nil {
 		panic(err.Error())
