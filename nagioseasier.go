@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-//	"io"
 	"os"
 	"net"
 	"sort"
 	"strings"
+
+	"github.com/stevedomin/termtable"
 )
 
 func main() {
-
 	// establish connection to our socket, for both reads and writes
 	conn, err := net.Dial("unix", "/var/lib/nagios/rw/nagios.qh")
 	if err != nil {
@@ -43,14 +43,26 @@ func main() {
 	lines := strings.Split(output, "\n")
 	sort.Sort(sort.StringSlice(lines))
 
-	for _, line := range lines[1:] {
+	if len(lines[1:]) > 0 {
+		t := termtable.NewTable(nil, &termtable.TableOptions{Padding: 5, UseSeparator: true})
+		t.SetHeader([]string{"Service", "Status", "Details"})
 
-		if strings.Count(line, ";") == 3 {
-			fmt.Println(line)
-		} else {
-			// whatever
-			fmt.Println(line)
+		for _, line := range lines[1:] {
+			parts := strings.Split(line, ";")
+			var truncated string
+
+			if len(parts[2]) > 50 {
+				truncated = parts[2][0:50]
+			} else {
+				truncated = parts[2]
+			}
+
+			t.AddRow([]string{parts[0], parts[1], truncated})
 		}
+
+		fmt.Println(t.Render())
+	} else {
+		fmt.Println(lines[1:])
 	}
 }
 
