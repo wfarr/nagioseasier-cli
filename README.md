@@ -13,3 +13,9 @@ Gives you nice tabular output!
 |                    |          | probably care about, wrapped neatly <3                                   |
 +--------------------+----------+--------------------------------------------------------------------------+
 ```
+
+## Installation
+
+You can probably grab the precompiled source from the Releases page.
+
+Otherwise, you just need Go. The `Makefile` might be useful.
