@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"os"
 	"net"
+	"regexp"
 	"sort"
 	"strings"
 
-	"github.com/stevedomin/termtable"
+	"github.com/wfarr/termtable"
 )
 
 func main() {
@@ -43,26 +44,30 @@ func main() {
 	lines := strings.Split(output, "\n")
 	sort.Sort(sort.StringSlice(lines))
 
-	if len(lines[1:]) > 0 {
-		t := termtable.NewTable(nil, &termtable.TableOptions{Padding: 5, UseSeparator: true})
-		t.SetHeader([]string{"Service", "Status", "Details"})
+	table_it, err := regexp.MatchString(";", lines[1])
+
+	if len(lines[1:]) > 0 && table_it {
+		t := termtable.NewTable(&termtable.TableOptions{Padding: 1, Header: []string{"Service", "Status", "Details"}, MaxColWidth: 72,})
 
 		for _, line := range lines[1:] {
-			parts := strings.Split(line, ";")
-			var truncated string
+			parts := [3]string{"", "", ""}
+			split := strings.Split(line, ";")
 
-			if len(parts[2]) > 50 {
-				truncated = parts[2][0:50]
-			} else {
-				truncated = parts[2]
+			for i, part := range split {
+				parts[i] = strings.TrimSpace(part)
+
+				if parts[i] == "" {
+					parts[i] = "wat"
+				}
 			}
 
-			t.AddRow([]string{parts[0], parts[1], truncated})
+			row := []string{ parts[0], parts[1], parts[2] }
+			t.AddRow(row)
 		}
 
 		fmt.Println(t.Render())
 	} else {
-		fmt.Println(lines[1:])
+		fmt.Println(strings.Join(lines[1:], "\n"))
 	}
 }
 
@@ -80,14 +85,30 @@ func read_results(conn net.Conn) (output string) {
 		n, err := conn.Read(buf[:])
 
 		if err != nil {
-			return output
+			return scrub(output)
 		}
 
 		if n == 0 {
 			fmt.Println("Connection closed by socket")
-			return output
+			return scrub(output)
 		}
 
 		output = output + string(buf[0:n])
 	}
+}
+
+func scrub(input string) (output string) {
+	// get rid of pesky null chars
+	output = strings.Replace(input, "\000", "", -1)
+
+	// get rid of fake newlines, lol
+	output = strings.Replace(output, "\\n", "", -1)
+
+	// chomp off trailing newlines
+	output = strings.Trim(output, "\n")
+
+	// trim spaces
+	output = strings.TrimSpace(output)
+
+	return
 }

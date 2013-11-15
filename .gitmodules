@@ -1,0 +1,3 @@
+[submodule "src/github.com/wfarr/termtable"]
+	path = src/github.com/wfarr/termtable
+	url = git://github.com/wfarr/termtable.git
