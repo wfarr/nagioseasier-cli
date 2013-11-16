@@ -28,13 +28,13 @@ func main() {
 	case "help", "status", "check", "acknowledge", "unacknowledge", "disable_notifications", "enable_notifications", "downtime", "problems":
 		send_command(conn, strings.Join(os.Args[1:], " "))
 	case "ack":
-		send_command(conn, "acknowledge" + strings.Join(os.Args[2:], " "))
+		send_command(conn, "acknowledge" + " " + strings.Join(os.Args[2:], " "))
 	case "unack":
-		send_command(conn, "unacknowledge" + strings.Join(os.Args[2:], " "))
+		send_command(conn, "unacknowledge" + " " + strings.Join(os.Args[2:], " "))
 	case "mute":
-		send_command(conn, "disable_notifications" + strings.Join(os.Args[2:], " "))
+		send_command(conn, "disable_notifications" + " " + strings.Join(os.Args[2:], " "))
 	case "unmute":
-		send_command(conn, "enable_notifications" + strings.Join(os.Args[2:], " "))
+		send_command(conn, "enable_notifications" + " " + strings.Join(os.Args[2:], " "))
 	default:
 		send_command(conn, "help")
 	}
