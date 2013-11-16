@@ -40,13 +40,12 @@ func main() {
 	}
 
 	output := read_results(conn)
-
 	lines := strings.Split(output, "\n")
-	sort.Sort(sort.StringSlice(lines))
-
-	table_it, err := regexp.MatchString(";", lines[1])
+	table_it, err := regexp.MatchString(";", output)
 
 	if len(lines[1:]) > 0 && table_it {
+		sort.Sort(sort.StringSlice(lines))
+
 		t := termtable.NewTable(&termtable.TableOptions{Padding: 1, Header: []string{"Service", "Status", "Details"}, MaxColWidth: 72,})
 
 		for _, line := range lines[1:] {
