@@ -1,4 +1,4 @@
-VERSION=v0.0.4
+VERSION=v0.0.5
 
 default: dist
 
@@ -8,7 +8,7 @@ dist: clean
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o pkg/linux-amd64/nagioseasier
 
 	mkdir -p pkg/darwin-amd64
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o pkg/darwin-amd64/nagios-easier
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o pkg/darwin-amd64/nagioseasier
 
 	cd pkg && tar -cf nagioseasier_${VERSION}_darwin-amd64.tar.gz darwin-amd64 && cd ..
 	cd pkg && tar -cf nagioseasier_${VERSION}_linux-amd64.tar.gz linux-amd64 && cd ..
