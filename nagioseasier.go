@@ -52,8 +52,16 @@ func main() {
 			parts := [3]string{"", "", ""}
 			split := strings.Split(line, ";")
 
-			for i, part := range split {
-				parts[i] = strings.TrimSpace(part)
+                        for i := 0; i < 3; i++ {
+				var part string
+
+				if i == 2 {
+					part = strings.Join(split[2:], "")
+				} else {
+					part = split[i]
+				}
+
+				parts[i] = part
 
 				if parts[i] == "" {
 					parts[i] = "wat"
