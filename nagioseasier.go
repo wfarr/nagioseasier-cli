@@ -25,7 +25,7 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case "help", "status", "check", "acknowledge", "unacknowledge", "disable_notifications", "enable_notifications", "downtime", "problems", "muted":
+	case "help", "status", "check", "acknowledge", "unacknowledge", "disable_notifications", "enable_notifications", "downtime", "problems", "muted", "stats":
 		send_command(conn, strings.Join(os.Args[1:], " "))
 	case "ack":
 		send_command(conn, "acknowledge" + " " + strings.Join(os.Args[2:], " "))
@@ -74,7 +74,7 @@ func main() {
 
 		fmt.Println(t.Render())
 	} else {
-		fmt.Println(strings.Join(lines[1:], "\n"))
+		fmt.Println(strings.Join(lines, "\n"))
 	}
 }
 
