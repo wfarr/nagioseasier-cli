@@ -74,7 +74,7 @@ func main() {
 
 		fmt.Println(t.Render())
 	} else {
-		fmt.Println(strings.Join(lines, "\n"))
+		fmt.Println(strings.Join(lines[0:len(lines)-1], "\n"))
 	}
 }
 
